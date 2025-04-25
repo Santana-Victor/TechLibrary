@@ -1,6 +1,7 @@
 package com.victorsantana.TechLibrary.controllers;
 
 import com.victorsantana.TechLibrary.entities.User;
+import com.victorsantana.TechLibrary.exceptions.EmailAddressAlreadyRegisteredException;
 import com.victorsantana.TechLibrary.repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,10 @@ public class UserController {
     public ResponseEntity<User> create(@RequestBody User user) {
         user.setId(UUID.randomUUID());
         user.setCreatedAt(Instant.now());
+
+        this.userRepository
+                .findByEmail(user.getEmail())
+                .ifPresent(userFound -> { throw new EmailAddressAlreadyRegisteredException(); });
 
         User savedUser = this.userRepository.save(user);
 
