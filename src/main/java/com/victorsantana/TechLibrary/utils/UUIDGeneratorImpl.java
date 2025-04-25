@@ -1,5 +1,7 @@
 package com.victorsantana.TechLibrary.utils;
 
+import com.fasterxml.uuid.Generators;
+import com.fasterxml.uuid.impl.UUIDUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -9,11 +11,11 @@ public class UUIDGeneratorImpl implements UUIDGenerator {
 
     @Override
     public UUID randomUUID() {
-        return UUID.randomUUID();
+        return Generators.timeBasedEpochGenerator().generate();
     }
 
     @Override
     public UUID fromString(String id) {
-        return UUID.fromString(id);
+        return UUIDUtil.uuid(id);
     }
 }
