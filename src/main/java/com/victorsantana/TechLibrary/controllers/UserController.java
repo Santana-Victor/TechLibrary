@@ -1,6 +1,7 @@
 package com.victorsantana.TechLibrary.controllers;
 
-import com.victorsantana.TechLibrary.entities.User;
+import com.victorsantana.TechLibrary.dtos.user.CreateUserRequest;
+import com.victorsantana.TechLibrary.dtos.user.CreateUserResponse;
 import com.victorsantana.TechLibrary.useCases.user.CreateUserUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,8 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody User user) {
-        User result = this.createUserUseCase.execute(user);
+    public ResponseEntity<CreateUserResponse> create(@RequestBody CreateUserRequest dto) {
+        CreateUserResponse result = this.createUserUseCase.execute(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 }

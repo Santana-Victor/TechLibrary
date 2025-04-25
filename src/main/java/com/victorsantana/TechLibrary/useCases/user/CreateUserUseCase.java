@@ -1,5 +1,7 @@
 package com.victorsantana.TechLibrary.useCases.user;
 
+import com.victorsantana.TechLibrary.dtos.user.CreateUserRequest;
+import com.victorsantana.TechLibrary.dtos.user.CreateUserResponse;
 import com.victorsantana.TechLibrary.entities.User;
 import com.victorsantana.TechLibrary.exceptions.EmailAddressAlreadyRegisteredException;
 import com.victorsantana.TechLibrary.repositories.UserRepository;
@@ -19,14 +21,15 @@ public class CreateUserUseCase {
     }
 
     @Transactional
-    public User execute(User user) {
-        user.setId(UUID.randomUUID());
-        user.setCreatedAt(Instant.now());
-
+    public CreateUserResponse execute(CreateUserRequest dto) {
         this.userRepository
-                .findByEmail(user.getEmail())
+                .findByEmail(dto.email())
                 .ifPresent(userFound -> { throw new EmailAddressAlreadyRegisteredException(); });
 
-        return this.userRepository.save(user);
+        User newUser = new User(UUID.randomUUID(), dto.name(), dto.email(), dto.password(), Instant.now());
+
+        User savedUser = this.userRepository.save(newUser);
+
+        return new CreateUserResponse(savedUser);
     }
 }
