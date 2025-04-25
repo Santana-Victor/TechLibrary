@@ -16,9 +16,7 @@ public class UserController {
 
     private final CreateUserUseCase createUserUseCase;
 
-    public UserController(CreateUserUseCase createUserUseCase) {
-        this.createUserUseCase = createUserUseCase;
-    }
+    public UserController(CreateUserUseCase createUserUseCase) { this.createUserUseCase = createUserUseCase; }
 
     @PostMapping
     public ResponseEntity<CreateUserResponse> create(@RequestBody CreateUserRequest dto) {

@@ -52,8 +52,14 @@ class CreateUserUseCaseTest {
     @Test
     @DisplayName("Should register the user successfully.")
     void case01() {
-        CreateUserRequest input = new CreateUserRequest("John Doe", "johnDoe@example.com", "12345");
-        User expectedUser = new User(userId, input.name(), input.email(), input.password(), creationTimestamp);
+        CreateUserRequest input = new CreateUserRequest("John Doe",
+                "johnDoe@example.com",
+                "12345");
+        User expectedUser = new User(userId,
+                input.name(),
+                input.email(),
+                input.password(),
+                creationTimestamp);
 
         doReturn(Optional.empty()).when(userRepository).findByEmail(eq(input.email()));
         doReturn(userId).when(uuuidGenerator).randomUUID();
@@ -85,8 +91,14 @@ class CreateUserUseCaseTest {
     @Test
     @DisplayName("Should throw EmailAddressAlreadyRegisteredException when the given email address is already registered.")
     void case02() {
-        CreateUserRequest input = new CreateUserRequest("John Doe", "johnDoe@example.com", "12345");
-        User existingUser = new User(userId, input.name(), input.email(), input.password(), creationTimestamp);
+        CreateUserRequest input = new CreateUserRequest("John Doe",
+                "johnDoe@example.com",
+                "12345");
+        User existingUser = new User(userId,
+                input.name(),
+                input.email(),
+                input.password(),
+                creationTimestamp);
 
         doReturn(Optional.of(existingUser)).when(userRepository).findByEmail(eq(input.email()));
 

@@ -1,4 +1,4 @@
-package com.victorsantana.TechLibrary.integration.controllers;
+package com.victorsantana.TechLibrary.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.victorsantana.TechLibrary.dtos.user.CreateUserRequest;

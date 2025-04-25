@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: postgres:17.2
+    container_name: tech_library_dev
+    ports:
+      - '5440:5432'
+    environment:
+      POSTGRES_DB: tech_library
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345

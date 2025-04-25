@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ExceptionHandlerController {
 
-    private ResponseEntity<RestErrorMessage> buildErrorResponse(HttpStatus status, String message) {
+    private ResponseEntity<RestErrorMessage> buildErrorResponse(HttpStatus status,
+                                                                String message
+    ) {
         RestErrorMessage errorMessage = new RestErrorMessage(status.value(), status.getReasonPhrase(), message);
         return ResponseEntity.status(status).body(errorMessage);
     }
