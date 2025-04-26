@@ -15,7 +15,9 @@ public class AuthUserController {
 
     private final AuthUserUseCase authUserUseCase;
 
-    public AuthUserController(AuthUserUseCase authUserUseCase) { this.authUserUseCase = authUserUseCase; }
+    public AuthUserController(AuthUserUseCase authUserUseCase) {
+        this.authUserUseCase = authUserUseCase;
+    }
 
     @PostMapping
     public ResponseEntity<AuthResponse> execute(@RequestBody AuthRequest dto) {
