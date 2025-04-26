@@ -21,4 +21,9 @@ public class ExceptionHandlerController {
     ) {
         return buildErrorResponse(HttpStatus.CONFLICT, exception.getMessage());
     }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<RestErrorMessage> handleInvalidCredentialsException(InvalidCredentialsException exception) {
+        return buildErrorResponse(HttpStatus.UNAUTHORIZED, exception.getMessage());
+    }
 }

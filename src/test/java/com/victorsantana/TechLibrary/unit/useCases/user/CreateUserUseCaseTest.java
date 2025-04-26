@@ -16,6 +16,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -37,6 +38,8 @@ class CreateUserUseCaseTest {
     private final Instant creationTimestamp = Instant.parse("2030-03-03T09:00:00Z");
 
     @Mock
+    private PasswordEncoder passwordEncoder;
+    @Mock
     private TimestampGenerator timestampGenerator;
     @Mock
     private UserRepository userRepository;
@@ -52,18 +55,20 @@ class CreateUserUseCaseTest {
     @Test
     @DisplayName("Should register the user successfully.")
     void case01() {
+        String encodedPassword = "encodedPassword";
         CreateUserRequest input = new CreateUserRequest("John Doe",
                 "johnDoe@example.com",
                 "12345");
         User expectedUser = new User(userId,
                 input.name(),
                 input.email(),
-                input.password(),
+                encodedPassword,
                 creationTimestamp);
 
         doReturn(Optional.empty()).when(userRepository).findByEmail(eq(input.email()));
         doReturn(userId).when(uuuidGenerator).randomUUID();
         doReturn(creationTimestamp).when(timestampGenerator).now();
+        doReturn(encodedPassword).when(passwordEncoder).encode(eq(input.password()));
         doReturn(expectedUser).when(userRepository).save(any(User.class));
 
         CreateUserResponse output = createUserUseCase.execute(input);
@@ -71,8 +76,9 @@ class CreateUserUseCaseTest {
         verify(userRepository).findByEmail(eq(input.email()));
         verify(uuuidGenerator).randomUUID();
         verify(timestampGenerator).now();
+        verify(passwordEncoder).encode(eq(input.password()));
         verify(userRepository).save(userArgumentCaptor.capture());
-        verifyNoMoreInteractions(userRepository, uuuidGenerator, timestampGenerator);
+        verifyNoMoreInteractions(userRepository, uuuidGenerator, timestampGenerator, passwordEncoder);
 
         User userCaptured = userArgumentCaptor.getValue();
 
@@ -91,13 +97,14 @@ class CreateUserUseCaseTest {
     @Test
     @DisplayName("Should throw EmailAddressAlreadyRegisteredException when the given email address is already registered.")
     void case02() {
+        String encodedPassword = "encodedPassword2";
         CreateUserRequest input = new CreateUserRequest("John Doe",
                 "johnDoe@example.com",
                 "12345");
         User existingUser = new User(userId,
                 input.name(),
                 input.email(),
-                input.password(),
+                encodedPassword,
                 creationTimestamp);
 
         doReturn(Optional.of(existingUser)).when(userRepository).findByEmail(eq(input.email()));
@@ -106,6 +113,6 @@ class CreateUserUseCaseTest {
 
         verify(userRepository).findByEmail(eq(input.email()));
         verifyNoMoreInteractions(userRepository);
-        verifyNoInteractions(uuuidGenerator, timestampGenerator);
+        verifyNoInteractions(uuuidGenerator, timestampGenerator, passwordEncoder);
     }
 }
